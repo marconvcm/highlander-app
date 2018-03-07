@@ -1,28 +1,36 @@
-import fetch from "cross-fetch";
-import { REGISTER_EMAIL, RECEIVE_USER_ID, REQUEST_REGISTER_EMAIL } from "./actionTypes";
+import api from '../../api'
+import { 
+    REQUEST_REGISTER_EMAIL, 
+    REQUEST_REGISTER_EMAIL_SUCCESS, 
+    REQUEST_REGISTER_EMAIL_ERROR 
+} from "./actionTypes";
 
 export const registerEmail = (email) => {
 
     return function(dispatch) {
         dispatch(requestRegisterEmail(email))
-        return fetch("https://highlander-server.herokuapp.com/register", { 
-            method: "POST", 
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            }, body: JSON.stringify({ email: email })
-        })
-        .then(r => { console.log(r); return r })
-        .then(r => r.json())
-        .then(j => dispatch(receiveUserId(j.id)))
+
+        return api("/register", "POST", { email })
+                .then(r => { console.log(r); return r })
+                .then(r => r.json())
+                .then(j => dispatch(requestRegisterEmailSuccess(j.id)))
     }
 };
 
-export const receiveUserId = (id) => {
+export const requestRegisterEmailSuccess = (id) => {
     
     return {
-        type: RECEIVE_USER_ID,
+        type: REQUEST_REGISTER_EMAIL_SUCCESS,
         id: id, 
+        isLoading: false
+    }
+};
+
+export const requestRegisterEmailError = () => {
+    
+    return {
+        type: REQUEST_REGISTER_EMAIL_ERROR,
+        id: null, 
         isLoading: false
     }
 };

@@ -17,7 +17,7 @@ class RegisterScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Register your account { this.props.isLoading } { this.props.userId } </Text>
+        <Text>Register your account</Text>
         <TextInput 
           keyboardType="email-address" 
           style={registerTextInputStyle}  

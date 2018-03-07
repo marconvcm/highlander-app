@@ -4,43 +4,52 @@ import { connect } from 'react-redux';
 import { registerEmail } from '../store/actions/register'
 
 class RegisterScreen extends React.Component {
-
   state = {
     email: ""
+  }
+
+  register() {
+    var result = this.props.registerEmail(this.state.email).then(() => {
+      this.props.navigation.navigate('Home')  
+    });
   }
 
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Register your account</Text>
-        <TextInput style={{
-          height: 40,
-          width: "80%",
-          padding: 10,
-          margin:10,
-          borderBottomColor: 'gray',
-          borderLeftWidth: 0,
-          borderRightWidth: 0,
-          borderTopWidth: 0,
-          textAlign: "center",
-          borderWidth: 1
-        }} placeholder="Please, enter you e-mail" 
-        keyboardType="email-address" 
-        onChangeText={(text) => this.setState({ email: text })}/>
-
+        <Text>Register your account { this.props.isLoading } { this.props.userId } </Text>
+        <TextInput 
+          keyboardType="email-address" 
+          style={registerTextInputStyle}  
+          placeholder="Please, enter you e-mail"
+          onChangeText={(text) => this.setState({ email: text })}/>
         <Button
           title="Register"
-          onPress={() => this.props.registerEmail(this.state.email)} />
+          onPress={() => this.register() } />
       </View>
     );
   }
 }
 
 
+const registerTextInputStyle = {
+  height: 40,
+  width: "80%",
+  padding: 10,
+  margin:10,
+  borderBottomColor: 'gray',
+  borderLeftWidth: 0,
+  borderRightWidth: 0,
+  borderTopWidth: 0,
+  textAlign: "center",
+  borderWidth: 1
+};
+
 const mapStateToProps = (state) => {
   return {
     isLoading: state.register.isLoading,
     email: state.register.email,
+    userId: state.register.userId
   };
 };
 
@@ -50,6 +59,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen)
-

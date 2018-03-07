@@ -7,8 +7,8 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>{ this.props.email }</Text>
-        <Button title="SafeZone" onPress={() => this.props.navigation.navigate('Details')}/>
+        <Text>E-mail: { this.props.email }</Text>
+        <Text>UserId: { this.props.userId }</Text>
       </View>
     );
   }
@@ -18,6 +18,7 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.register.isLoading,
     email: state.register.email,
+    userId: state.register.userId
   };  
 };
 

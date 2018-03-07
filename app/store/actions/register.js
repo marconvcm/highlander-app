@@ -4,9 +4,17 @@ import { REGISTER_EMAIL, RECEIVE_USER_ID, REQUEST_REGISTER_EMAIL } from "./actio
 export const registerEmail = (email) => {
 
     return function(dispatch) {
-
         dispatch(requestRegisterEmail(email))
-        return setTimeout(() => dispatch(receiveUserId("1")), 3000)
+        return fetch("https://highlander-server.herokuapp.com/register", { 
+            method: "POST", 
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            }, body: JSON.stringify({ email: email })
+        })
+        .then(r => { console.log(r); return r })
+        .then(r => r.json())
+        .then(j => dispatch(receiveUserId(j.id)))
     }
 };
 

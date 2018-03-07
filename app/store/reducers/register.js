@@ -1,8 +1,8 @@
-import { REGISTER_EMAIL, RECEIVE_USER_ID } from '../actions/actionTypes'
+import { REQUEST_REGISTER_EMAIL, RECEIVE_USER_ID } from '../actions/actionTypes'
 
 const initialState = {
     isLoading: false,
-    email: "marconvcm@gmal.com",
+    email: "marconvcm@gmail.com",
     userId: null
 }
 
@@ -14,10 +14,11 @@ export default reducer = (state = initialState, action) => {
                 ...state,
                 userId: action.id
             };
-        case REGISTER_EMAIL:
+        case REQUEST_REGISTER_EMAIL:
             return {
                 ...state,
-                email: action.email
+                email: action.email,
+
             };
         default:
             return state;

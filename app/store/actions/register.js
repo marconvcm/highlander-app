@@ -8,38 +8,25 @@ import {
 export const registerEmail = (email) => {
 
     return function(dispatch) {
-        dispatch(requestRegisterEmail(email))
 
-        return api("/register", "POST", { email })
-                .then(r => { console.log(r); return r })
-                .then(r => r.json())
-                .then(j => dispatch(requestRegisterEmailSuccess(j.id)))
-    }
-};
+        dispatch({
+            type: REQUEST_REGISTER_EMAIL,
+            email: email, 
+            isLoading: true
+        });
 
-export const requestRegisterEmailSuccess = (id) => {
-    
-    return {
-        type: REQUEST_REGISTER_EMAIL_SUCCESS,
-        id: id, 
-        isLoading: false
-    }
-};
-
-export const requestRegisterEmailError = () => {
-    
-    return {
-        type: REQUEST_REGISTER_EMAIL_ERROR,
-        id: null, 
-        isLoading: false
-    }
-};
-
-export const requestRegisterEmail = (email) => {
-    
-    return {
-        type: REQUEST_REGISTER_EMAIL,
-        email: email, 
-        isLoading: true
+        return api('register', 'POST', { email }).then(r => r.json()).then(j => {
+            dispatch({
+                type: REQUEST_REGISTER_EMAIL_SUCCESS,
+                id: id, 
+                isLoading: false
+            });
+        }).catch(() => {
+            dispatch({
+                type: REQUEST_REGISTER_EMAIL_ERROR,
+                id: null, 
+                isLoading: false
+            });
+        });
     }
 };

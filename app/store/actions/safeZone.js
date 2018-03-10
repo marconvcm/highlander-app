@@ -11,55 +11,67 @@ import {
     SEND_KEEP_ALIVE_SUCCESS
 } from "./actionTypes";
 
-
 export const requestOpen = (userId) => {
 
     return (dispatch) => {
 
         dispatch({
-            action: REQUEST_OPEN,
+            type: REQUEST_OPEN,
             userId: userId
         });
 
-        return api(`/open/${userId}`, "POST")
-                .then(r =>  dispatch(requestOpenSuccess(r.text())))
+        return api(`open/${userId}`, "PUT").then(r => {    
+            if (r.status == "200") {
+                return r.json()
+            } else {
+                return Promise.reject("403")
+            }
+        }).then(j => {
+            dispatch({
+                type: REQUEST_OPEN_SUCCESS,
+                token: j.token,
+            })
+        }).catch(() => {
+            dispatch({
+                type: REQUEST_OPEN_ERROR,
+                token: null,
+            })
+        })
     }
 }
 
-export const requestOpenSuccess = (token) => {
-    
-    return {
-        action: REQUEST_OPEN,
-        token: token,
+export const requestClose = (token) => {
+
+    return (dispatch) => {
+        dispatch({
+            type: REQUEST_CLOSE,
+        });
+        return api(`close/${token}`, `DELETE`).then(() => {
+            dispatch({
+                type: REQUEST_CLOSE_SUCCESS
+            });
+        }).catch(() => {
+            dispatch({
+                type: REQUEST_CLOSE_ERROR
+            });
+        });
     }
 }
 
-export const requestOpenError = () => {
+export const sendKeepAlive = (token) => {
 
-    return {
-        action: REQUEST_OPEN,
-        token: null,
+    return (dispatch) => {
+        dispatch({
+            type: SEND_KEEP_ALIVE,
+        });
+        return api(`keepalive/${token}`).then(() => {
+            dispatch({
+                type: SEND_KEEP_ALIVE_SUCCESS
+            });
+        }).catch(() => {
+            dispatch({
+                type: SEND_KEEP_ALIVE_ERROR
+            });
+        });
     }
-}
-
-
-export const requestClose = (state, action) => {
-
-}
-export const requestCloseError = (state, action) => {
-
-}
-export const requestCloseSuccess = (state, action) => {
-
-}
-
-
-export const sendKeepAlive = (state, action) => {
-
-}
-export const sendKeepAliveError = (state, action) => {
-
-}
-export const sendKeepAliveSuccess = (state, action) => {
-
 }

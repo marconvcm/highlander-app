@@ -10,7 +10,7 @@ class RegisterScreen extends React.Component {
 
   register() {
     var result = this.props.registerEmail(this.state.email).then(() => {
-      this.props.navigation.navigate('Home')  
+      this.props.navigation.navigate('Home')
     });
   }
 
@@ -46,6 +46,7 @@ const registerTextInputStyle = {
 };
 
 const mapStateToProps = (state) => {
+  
   return {
     isLoading: state.register.isLoading,
     email: state.register.email,
@@ -54,6 +55,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  
   return {
     registerEmail: (email) => dispatch(registerEmail(email))
   };

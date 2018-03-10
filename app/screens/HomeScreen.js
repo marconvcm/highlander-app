@@ -10,7 +10,19 @@ import {
 class HomeScreen extends React.Component {
 
   openSafeScreen() {
-    this.props.requestOpen(this.props.userId);
+    this.props.requestOpen(this.props.userId).then(() => {
+      if(this.props.isOpen) {
+        this.props.navigation.navigate('Safe')
+      }
+    });
+  }
+
+  renderMessage() {
+    if(this.props.isAccessDenied) {
+      return <Text style={{ color: "red" }}> You aren't allowed to access </Text>
+    } else {
+      return <Text></Text>
+    }
   }
 
   render() {
@@ -19,6 +31,7 @@ class HomeScreen extends React.Component {
         <Button
           title="Open Safe screen"
           onPress={() => this.openSafeScreen() } />
+        { this.renderMessage() }
       </View>
     );
   }
@@ -28,15 +41,16 @@ const mapStateToProps = (state) => {
   return {
     isLoading: state.register.isLoading,
     email: state.register.email,
-    userId: state.register.userId
+    userId: state.register.userId,
+    token: state.safeZone.token,
+    isAccessDenied: state.safeZone.isAccessDenied,
+    isOpen: state.safeZone.isOpen
   };  
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    requestOpen: () => dispatch(requestOpen()),
-    requestOpenError: () => dispatch(requestOpenError()),
-    requestOpenSuccess: () => dispatch(requestOpenSuccess())
+    requestOpen: (userId) => dispatch(requestOpen(userId)),
   };
 };
 
